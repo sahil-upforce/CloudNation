@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 from core.models import BaseModel, DatabasePlanType, ExternalServicePlanType, Framework
@@ -13,8 +14,8 @@ class Project(BaseModel):
     owner = models.ForeignKey(verbose_name=_("owner"), to=User, on_delete=models.DO_NOTHING, related_name="projects")
 
     class Meta:
-        verbose_name = "project"
-        verbose_name_plural = "projects"
+        verbose_name = "Project"
+        verbose_name_plural = "Projects"
         db_table = "projects"
 
     def __str__(self):
@@ -32,7 +33,7 @@ class ProjectAPP(BaseModel):
         ("FL", "Failed"),
     )
 
-    name = models.CharField(verbose_name=_("name"), max_length=200, unique=True)
+    name = models.CharField(verbose_name=_("name"), max_length=200)
     project = models.ForeignKey(verbose_name=_("project"), to=Project, on_delete=models.DO_NOTHING, related_name="apps")
     framework = models.ForeignKey(
         verbose_name=_("framework"),
@@ -54,15 +55,19 @@ class ProjectAPP(BaseModel):
         null=True,
         blank=True
     )
-    status = models.CharField(verbose_name=_("status"), max_length=10, choices=STATUS_CHOICES)
+    status = models.CharField(verbose_name=_("status"), max_length=10, choices=STATUS_CHOICES, default="CR")
 
     # Region will add based on country
     # region = models.ForeignKey(verbose_name=_("region"), to=Region, on_delete=models.DO_NOTHING, related_name="apps")
 
     class Meta:
-        verbose_name = "app"
-        verbose_name_plural = "apps"
+        verbose_name = "APP"
+        verbose_name_plural = "APPs"
         db_table = "apps"
+        constraints = [
+            models.UniqueConstraint(
+                fields=['name', 'project'], condition=Q(deleted_at__isnull=True), name='name_project_unique_constraint'
+        )]
 
     def __str__(self):
         return self.name
@@ -81,9 +86,13 @@ class EnvironmentVariable(BaseModel):
     # Can add type - Ex: Str, Int, Float ...
 
     class Meta:
-        verbose_name = "environment_variable"
-        verbose_name_plural = "environment_variables"
+        verbose_name = "Environment Variable"
+        verbose_name_plural = "Environment Variables"
         db_table = "environment_variables"
+        constraints = [
+            models.UniqueConstraint(
+                fields=['name', 'app'], condition=Q(deleted_at__isnull=True), name='name_app_unique_constraint'
+            )]
 
     def __str__(self):
         return self.name
