@@ -89,8 +89,8 @@ class ExternalService(BaseModel):
     name = models.CharField(verbose_name=_("name"), max_length=200)
 
     class Meta:
-        verbose_name = "external_service"
-        verbose_name_plural = "external_services"
+        verbose_name = "External Service"
+        verbose_name_plural = "External Services"
         db_table = "external_services"
 
     def __str__(self):
@@ -101,8 +101,8 @@ class ExternalServicePlanType(BaseModel, BasePlanTypeModel):
     external_service = models.ForeignKey(verbose_name=_("external service"), to=ExternalService, on_delete=models.DO_NOTHING, related_name="external_service_plan_types")
 
     class Meta:
-        verbose_name = "external_service_plan_type"
-        verbose_name_plural = "external_service_plan_types"
+        verbose_name = "External Service Plan Type"
+        verbose_name_plural = "External Service Plan Types"
         db_table = "external_service_plan_types"
 
     def __str__(self):
@@ -113,8 +113,8 @@ class DatabaseType(BaseModel):
     name = models.CharField(verbose_name=_("name"), max_length=200)
 
     class Meta:
-        verbose_name = "database_type"
-        verbose_name_plural = "database_types"
+        verbose_name = "Database Type"
+        verbose_name_plural = "Database Types"
         db_table = "database_types"
 
     def __str__(self):
@@ -125,8 +125,8 @@ class DatabasePlanType(BaseModel, BasePlanTypeModel):
     database_type = models.ForeignKey(verbose_name=_("database type"), to=DatabaseType, on_delete=models.DO_NOTHING, related_name="database_plan_types")
 
     class Meta:
-        verbose_name = "database_plan_type"
-        verbose_name_plural = "database_plan_types"
+        verbose_name = "Database Plan Type"
+        verbose_name_plural = "Database Plan Types"
         db_table = "database_plan_types"
 
     def __str__(self):
